@@ -1,0 +1,35 @@
+<form [formGroup]="inventarioFormGroup" role="form">
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Canal</mat-label>
+                <input matInput type="text" formControlName="canal">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Folio</mat-label>
+                <input matInput type="text" formControlName="folio">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Etiqueta Ransa</mat-label>
+                <input matInput type="text" formControlName="etiquetaRansa">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Etiqueta Cliente</mat-label>
+                <input matInput type="text" formControlName="etiquetaCliente">
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+<div class="btn-group left">
+    <button mat-button class="btn-yellow" [disabled]="inventarioFormGroup.invalid" (click)="save()">
+        <span class="btn-span">Grabar <mat-icon>save</mat-icon></span>
+    </button>
+    <button mat-button (click)="cancel()">Cancelar</button>
+</div>
+
