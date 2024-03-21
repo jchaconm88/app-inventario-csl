@@ -1,0 +1,17 @@
+<form [formGroup]="inventarioFormGroup" role="form">
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Usuario</mat-label>
+                <input matInput type="text" formControlName="usuario" 
+                    (keydown.tab)="save();false" (keydown.enter)="save()">
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+<div class="btn-group left">
+    <button mat-button class="btn-yellow" [disabled]="inventarioFormGroup.invalid" (click)="save()">
+        <span class="btn-span">Continuar <mat-icon>keyboard_tab</mat-icon></span>
+    </button>
+    <button mat-button (click)="cancel()">Cancelar</button>
+</div>

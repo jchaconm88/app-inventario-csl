@@ -11,13 +11,19 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import { InventarioLecturaComponent } from './inventario/inventario-lectura/inventario-lectura.component';
+import { InventarioUsuarioComponent } from './inventario/inventario-usuario/inventario-usuario.component';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { InventarioDunComponent } from './inventario/inventario-dun/inventario-dun.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     InventarioComponent,
-    InventarioLecturaComponent
+    InventarioLecturaComponent,
+    InventarioUsuarioComponent,
+    InventarioDunComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +35,9 @@ import { InventarioLecturaComponent } from './inventario/inventario-lectura/inve
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
+    MatPaginatorModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,21 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Inventario } from 'src/app/inventario';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { LocalService } from '../local.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InventarioLecturaComponent } from './inventario-lectura/inventario-lectura.component';
-import { Inventario } from '../inventario';
-
-const ELEMENT_DATA: Inventario[] = [
-  {canal: '1', folio: 'Hydrogen', etiquetaRansa: '1.0079', etiquetaCliente: 'H'},
-  {canal: '2', folio: 'Helium', etiquetaRansa: '4.0026', etiquetaCliente: 'He'},
-  {canal: '3', folio: 'Lithium', etiquetaRansa: '6.941', etiquetaCliente: 'Li'},
-  {canal: '4', folio: 'Beryllium', etiquetaRansa: '9.0122', etiquetaCliente: 'Be'},
-  {canal: '5', folio: 'Boron', etiquetaRansa: '10.811', etiquetaCliente: 'B'},
-  {canal: '6', folio: 'Carbon', etiquetaRansa: '12.0107', etiquetaCliente: 'C'},
-  {canal: '7', folio: 'Nitrogen', etiquetaRansa: '14.0067', etiquetaCliente: 'N'},
-  {canal: '8', folio: 'Oxygen', etiquetaRansa: '15.9994', etiquetaCliente: 'O'},
-  {canal: '9', folio: 'Fluorine', etiquetaRansa: '18.9984', etiquetaCliente: 'F'},
-  {canal: '10', folio: 'Neon', etiquetaRansa: '20.1797', etiquetaCliente: 'Ne'},
-];
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { InventarioUsuarioComponent } from './inventario-usuario/inventario-usuario.component';
 
 @Component({
   selector: 'app-inventario',
@@ -23,6 +14,8 @@ const ELEMENT_DATA: Inventario[] = [
   styleUrls: ['./inventario.component.css']
 })
 export class InventarioComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('linkDwnl') linkDwnl!: ElementRef
   dialog: MatDialog
   columns = [
     {
@@ -31,41 +24,106 @@ export class InventarioComponent implements OnInit {
       cell: (element: Inventario) => `${element.canal}`,
     },
     {
-      columnDef: 'folio',
-      header: 'Folio',
-      cell: (element: Inventario) => `${element.folio}`,
+      columnDef: 'folioEtiqueta',
+      header: 'Folio/Etiqueta',
+      cell: (element: Inventario) => `${element.folioEtiqueta}`,
     },
     {
-      columnDef: 'etiquetaRansa',
-      header: 'Etiqueta Ransa',
-      cell: (element: Inventario) => `${element.etiquetaRansa}`,
+      columnDef: 'dun',
+      header: 'Dun',
+      cell: (element: Inventario) => `${element.dun}`,
     },
     {
-      columnDef: 'etiquetaCliente',
-      header: 'Etiqueta Cliente',
-      cell: (element: Inventario) => `${element.etiquetaCliente}`,
+      columnDef: 'tipo',
+      header: 'Tipo',
+      cell: (element: Inventario) => `${element.tipo}`,
+    },
+    {
+      columnDef: 'usuario',
+      header: 'Usuario',
+      cell: (element: Inventario) => `${element.usuario}`,
+    },
+    {
+      columnDef: 'fecha',
+      header: 'Fecha',
+      cell: (element: Inventario) => `${element.fecha}`,
     },
   ];
-  dataSource = ELEMENT_DATA;
+  dataSource: MatTableDataSource<Inventario>
   displayedColumns = this.columns.map(c => c.columnDef);
+  inventarioList: Inventario[] = []
 
   constructor(private localService: LocalService
     , dialog: MatDialog) {  
       this.dialog = dialog;
+      this.dataSource = new MatTableDataSource()
    }
 
   ngOnInit(): void {
+    this.load()
+  }
+
+  load(): void {
+    //this.isWait = true;
+    this.inventarioList = JSON.parse(this.localService.getData('inventario')? this.localService.getData('inventario')!: '[]')    
+    this.setDatasource();
+    //this.isWait = false;
+  }
+
+  filter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+  setDatasource(): void {
+    this.dataSource = new MatTableDataSource(this.inventarioList);
+    this.dataSource.paginator = this.paginator;
+    //this.dataSource.sort = this.sort;
+
+    // this.dataSource.filterPredicate = function (data, filter: string): boolean {
+    //   let filterObject = JSON.parse(filter)
+    //   return getFilterPredicate(data, filterObject.value, filterObject.columnData)
+    // };
   }
 
   create() {
-    const dialogRef = this.dialog.open(InventarioLecturaComponent);
+    
+    const dialogUserRef = this.dialog.open(InventarioUsuarioComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        //this.load();
+    dialogUserRef.afterClosed().subscribe(user => {
+      if (user) {
+        const dialogRef = this.dialog.open(InventarioLecturaComponent, { data: user });
+        dialogRef.afterClosed().subscribe(result => {
+          this.load();
+        });
       }
     });
+    
+  }
+
+  clear() {
+    this.localService.clearData()
+    this.load()
+  }
+
+  download() {
+    let downString = ''
+    let contador = 0
+    for (const inventario of this.inventarioList) {
+      contador++
+      downString = downString + `${contador}|PALLET|${inventario.canal}|${inventario.folioEtiqueta}|${inventario.dun}|${inventario.tipo}|${inventario.usuario}|${inventario.fecha}` + '\n'
+    }
+    const blob = new Blob([downString], { type: 'application/octet-stream' });
+    const url= window.URL.createObjectURL(blob)
+    var link = document.createElement("a")
+    link.href = url
+    link.download = `INV_${new Date().toISOString()}.txt`;
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 }
-
-
