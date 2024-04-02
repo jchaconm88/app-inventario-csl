@@ -1,0 +1,47 @@
+<form [formGroup]="inventarioFormGroup" role="form">
+    <div class="row">
+        <div class="col-md-12">
+            <p>Numero de Folio/Etiqueta(s) leidas: {{numeroFolios}}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Canal</mat-label>
+                <input matInput #txtCanal type="text" formControlName="canal"  
+                    (keydown.enter)="txtDun.focus()">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Dun</mat-label>
+                <input matInput #txtDun type="text" formControlName="dun"
+                    (keydown.enter)="txtLote.focus()"> 
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Lote</mat-label>
+                <input matInput #txtLote type="text" formControlName="lote" 
+                    (keydown.enter)="txtCantidad.focus()"> 
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field class="example-form-field" appearance="fill">
+                <mat-label>Cantidad</mat-label>
+                <input matInput #txtCantidad type="text" formControlName="cantidad" 
+                    (keydown.enter)="validarFolio()">
+            </mat-form-field>
+        </div>
+    </div>
+</form>
+<div class="btn-group left">
+    <button mat-button class="btn-yellow" [disabled]="inventarioFormGroup.invalid" (click)="validarFolio()">
+        <span class="btn-span">Grabar <mat-icon>save</mat-icon></span>
+    </button>
+    <button mat-button class="btn-yellow" (click)="nuevoCanal()">
+        <span class="btn-span">Nuevo Canal <mat-icon>add_box</mat-icon></span>
+    </button>
+    <button mat-button (click)="cancel()">Terminar</button>
+</div>
+
