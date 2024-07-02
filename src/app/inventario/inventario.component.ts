@@ -184,12 +184,12 @@ export class InventarioComponent implements OnInit {
 
     let canal = this.inventarioList[0].canal
     for (const inventario of this.inventarioList) {
-      contador++
-      downString = downString + `${contador}|PALET|${inventario.canal}|${inventario.folioEtiqueta}|${inventario.dun}|${inventario.tipo}|||${inventario.usuario}|${inventario.fecha}` + '\n'
       if (canal != inventario.canal) {
         contador = 0
         canal = inventario.canal
       }
+      contador++
+      downString = downString + `${contador}|PALET|${inventario.canal}|${inventario.folioEtiqueta}|${inventario.dun}|${inventario.tipo}|||${inventario.usuario}|${inventario.fecha}` + '\n'
     }
     const blob = new Blob([downString], { type: 'application/octet-stream' });
     const url= window.URL.createObjectURL(blob)
@@ -213,12 +213,12 @@ export class InventarioComponent implements OnInit {
 
     let canal = this.inventarioCajaList[0].canal
     for (const inventario of this.inventarioCajaList) {
-      contador++
-      downString = downString + `${contador}|CAJA|${inventario.canal}||${inventario.dun}||${inventario.lote}|${inventario.cantidad}|${inventario.usuario}|${inventario.fecha}` + '\n'
       if (canal != inventario.canal) {
         contador = 0
         canal = inventario.canal
       }
+      contador++
+      downString = downString + `${contador}|CAJA|${inventario.canal}||${inventario.dun}||${inventario.lote}|${inventario.cantidad}|${inventario.usuario}|${inventario.fecha}` + '\n'
     }
     const blob = new Blob([downString], { type: 'application/octet-stream' });
     const url= window.URL.createObjectURL(blob)

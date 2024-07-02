@@ -25,3 +25,9 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## Angular commands
+ng g component inventario --project app-inventario-csl --module app.module.ts --style scss
+ng g component lectura-serie --project app-inventario-csl --module app.module.ts --style scss
+ng g component menu --project app-inventario-csl --module app.module.ts --style scss

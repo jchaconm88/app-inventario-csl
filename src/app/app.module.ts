@@ -18,6 +18,8 @@ import { InventarioUsuarioComponent } from './inventario/inventario-usuario/inve
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import { InventarioDunComponent } from './inventario/inventario-dun/inventario-dun.component';
 import { InventarioLecturaCajaComponent } from './inventario/inventario-lectura-caja/inventario-lectura-caja.component';
+import { LecturaSerieComponent } from './lectura-serie/lectura-serie.component';
+import { MenuComponent } from './menu/menu.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { InventarioLecturaCajaComponent } from './inventario/inventario-lectura-
     InventarioLecturaComponent,
     InventarioUsuarioComponent,
     InventarioDunComponent,
-    InventarioLecturaCajaComponent
+    InventarioLecturaCajaComponent,
+    LecturaSerieComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
